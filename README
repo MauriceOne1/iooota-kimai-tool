@@ -1,4 +1,4 @@
-# Kimai Presenze Tool
+#Kimai Presenze Tool
 
 Questo tool consente di generare automaticamente un report presenze mensile a partire da un file CSV esportato da Kimai, il software open source per il time tracking.
 
