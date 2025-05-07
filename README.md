@@ -35,7 +35,7 @@ Genera il file `.ods` compilato con presenze, nome e mese richiesto.
 ## ⛓️ Requisiti
 
 - Java 17 o superiore
-- jOpenDocument 1.3 ([scarica qui](https://repo1.maven.org/maven2/org/jopendocument/jOpenDocument/1.3/))
+- jOpenDocument 1.3
 - File `kimai-export.csv` esportato da Kimai
 - File `presenzeTemplate.ods` come modello (deve già contenere le righe da 1 a 31)
 
