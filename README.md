@@ -51,7 +51,9 @@ Genera il file `.ods` compilato con presenze, nome e mese richiesto.
 - [ ] Generazione automatica di **PDF**
 - [ ] Inserimento automatico **firma**
 - [ ] Interfaccia grafica base
-- [ ] Inserimento permessi / ferie / ROL / malattia 
+- [ ] Inserimento permessi / ferie / ROL / malattia
+- [ ] Inserimento data compilazione automatica
+- [ ] Calcolo automatico del costo auto ACI per rimborso chilometrico tramite modello
 
 ---
 
