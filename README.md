@@ -4,13 +4,14 @@
 ![Status](https://img.shields.io/badge/status-in%20development-orange?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-cli-lightgrey?style=flat-square)
 
-Uno strumento semplice ma potente per trasformare un file CSV esportato da **Kimai** in un **foglio presenze mensile** in formato `.ods`.
+Strumento per la generazione di un report presenze mensile a partire da un file CSV esportato da Kimai.  
+Produce un file ODS compilato automaticamente secondo un formato predefinito.
 
 ---
 
 ## ⚙️ Cosa fa
 
-- Legge un **dump CSV** esportato da Kimai (`kimai-export.csv`)
+- Elabora i dati esportati da Kimai
 - Genera automaticamente un **report delle presenze mensili** in formato `.ods`
 - Riconosce le giornate con attività e le marca come **giorni lavorativi**
 - Chiede all'utente:
@@ -43,9 +44,11 @@ Genera il file `.ods` compilato con presenze, nome e mese richiesto.
 
 ## 🚧 In sviluppo
 
-- [ ] Calcolo automatico del **rimborso chilometrico**
-- [ ] Riconoscimento delle giornate in **smart working**
+- [ ] Calcolo automatico del **rimborso chilometrico** e compilazione documento
+- [ ] Riconoscimento delle giornate in **smart working** attraverso un pattern "mese ordinario"
+- [ ] Riconoscimento delle giornate **festive**
 - [ ] Generazione automatica di **PDF**
+- [ ] Inserimento automatico **firma**
 - [ ] Interfaccia grafica base (facoltativa)
 
 ---
