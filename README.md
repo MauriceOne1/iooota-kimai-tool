@@ -45,11 +45,13 @@ Genera il file `.ods` compilato con presenze, nome e mese richiesto.
 ## 🚧 In sviluppo
 
 - [ ] Calcolo automatico del **rimborso chilometrico** e compilazione documento
-- [ ] Riconoscimento delle giornate in **smart working** attraverso un pattern "mese ordinario"
-- [ ] Riconoscimento delle giornate **festive**
+- [ ] Riconoscimento delle giornate in **smart working**
+- [ ] Riconoscimento delle giornate **festive** e chiusura aziendale
+- [ ] Collegamento diretto con **API Kimai**
 - [ ] Generazione automatica di **PDF**
 - [ ] Inserimento automatico **firma**
-- [ ] Interfaccia grafica base (facoltativa)
+- [ ] Interfaccia grafica base
+- [ ] Inserimento permessi / ferie / ROL / malattia 
 
 ---
 
