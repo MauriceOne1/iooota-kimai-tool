@@ -59,7 +59,7 @@ public class KimaiOds {
 			// Per ogni giorno con presenza, scrivi "8" nella cella B(9 + giorno - 1)
 			for (Integer giorno : giorniConPresenza) {
 				int row = 9 + (giorno - 1); // B10 è row 9, giorno 1 → row 9
-				sheet.setValueAt("8", 1, row); // colonna B = indice 1
+				sheet.setValueAt(8, 1, row);// colonna B = indice 1
 			}
 
 			// Salva il file ODS compilato
