@@ -10,8 +10,8 @@ public class Main {
 			System.exit(1);
 		}
 		
-		String inputFile = "E:\\Progetti\\Eclipse Workspace\\kimai-tool\\src\\main\\resources\\kimai-export.csv";
-		String presenzeTemplate = "E:\\Progetti\\Eclipse Workspace\\kimai-tool\\src\\main\\resources\\presenzeTemplate.ods";
+		String inputFile = "/home/maurice/git/iooota-kimai-tool/src/main/resources/kimai-export.csv";
+		String presenzeTemplate = "/home/maurice/git/iooota-kimai-tool/src/main/resources/presenzeTemplate.ods";
 
 		String arg0 = args[0];
 		switch (arg0) {
