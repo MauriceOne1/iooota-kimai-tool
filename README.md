@@ -42,12 +42,12 @@ Argomenti:
 
 ## 🚧 In sviluppo
 
-- [ ] Calcolo automatico del rimborso chilometrico e compilazione documento
-- [ ] Riconoscimento delle giornate in smart working
-- [ ] Riconoscimento delle giornate festive e chiusura aziendale
-- [ ] Collegamento diretto con API Kimai
-- [ ] Generazione automatica di PDF
-- [ ] Inserimento automatico firma
+- [ ] Calcolo automatico del **rimborso chilometrico** e compilazione documento
+- [ ] Riconoscimento delle giornate in **smart working**
+- [ ] Riconoscimento delle giornate **festive** e chiusura aziendale
+- [ ] Collegamento diretto con **API Kimai**
+- [ ] Generazione automatica di **PDF**
+- [ ] Inserimento automatico **firma**
 - [ ] Interfaccia grafica base
 - [ ] Inserimento permessi / ferie / ROL / malattia
 - [ ] Inserimento data compilazione automatica
@@ -61,4 +61,4 @@ Pull request, issue e feedback sono benvenuti!
 
 ---
 
-Realizzato tra una build fallita e l’altra, con la fondamentale supervisione di Alan.
+*Realizzato tra una build fallita e l’altra, con la fondamentale supervisione di Alan.*
