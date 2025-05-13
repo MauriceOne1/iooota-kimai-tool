@@ -1,14 +1,21 @@
 package com.example;
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 /**
  * Classe principale per elaborare CSV
+ * @author Maurice
  */
 public class KimaiCsv {
 	public static final String DEFAULT_CSV_SEPARATOR = ",";

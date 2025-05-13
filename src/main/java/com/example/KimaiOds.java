@@ -1,48 +1,38 @@
 package com.example;
 
-import org.jopendocument.dom.spreadsheet.SpreadSheet;
-import org.jopendocument.dom.spreadsheet.Sheet;
-
-import java.io.*;
-import java.nio.file.*;
+import java.io.File;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Locale;
+import java.util.Set;
+
+import org.jopendocument.dom.spreadsheet.Sheet;
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 public class KimaiOds {
 
-	private final Path inputCsv;
+	private final Path outputFile;
 	private final String templateOds;
-	private final String outputOds = "presenzeCompilate.ods";
 	private final String nome;
 	private final boolean mesePrecedente;
+	private Set<Integer> giorniConPresenza;
 
-	public KimaiOds(String inputCsv, String templateOds, String nome, boolean mesePrecedente) {
-		this(Paths.get(inputCsv), templateOds, nome, mesePrecedente);
-	}
-
-	public KimaiOds(Path inputCsv, String templateOds, String nome, boolean mesePrecedente) {
-		this.inputCsv = inputCsv;
+	public KimaiOds(Path outputFile, String templateOds, String nome, boolean mesePrecedente, Set<Integer> giorniConPresenza) {
+		this.outputFile = outputFile;
 		this.templateOds = templateOds;
 		this.nome = nome;
 		this.mesePrecedente = mesePrecedente;
+		this.giorniConPresenza = giorniConPresenza;
 	}
 
 	public void esegui() {
-		if (!Files.exists(inputCsv)) {
-			System.out.println("File CSV non trovato: " + inputCsv);
-			return;
-		}
+//		if (!Files.exists(outputFile)) {
+//			System.out.println("File CSV non trovato: " + outputFile);
+//			return;
+//		}
 
 		try {
-			KimaiCsv kimaiCsv = new KimaiCsv(inputCsv);
-
-			// Ottieni tutti i giorni del mese presenti nel CSV (numeri da 1 a 31)
-			Set<Integer> giorniConPresenza = kimaiCsv.getEntries().stream()
-					.map(entry -> entry.getStarTime().getDayOfMonth()) // estrae il giorno (1-31)
-					.collect(Collectors.toSet());
-
 			// Apri il file ODS
 			File file = new File(templateOds);
 			Sheet sheet = SpreadSheet.createFromFile(file).getSheet(0);
@@ -67,9 +57,8 @@ public class KimaiOds {
 			}
 
 			// Salva il file ODS compilato
-			File outputFile = new File(outputOds);
-			sheet.getSpreadSheet().saveAs(outputFile);
-			System.out.println("File ODS compilato salvato come: " + outputOds);
+			sheet.getSpreadSheet().saveAs(outputFile.toFile());
+			System.out.println("File ODS compilato salvato come: " + outputFile);
 
 		} catch (Exception e) {
 			System.out.println("Errore durante l’elaborazione:");
