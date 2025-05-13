@@ -12,13 +12,17 @@ import java.util.stream.Collectors;
 
 public class KimaiOds {
 
-	private final String inputCsv;
+	private final Path inputCsv;
 	private final String templateOds;
 	private final String outputOds = "presenzeCompilate.ods";
 	private final String nome;
 	private final boolean mesePrecedente;
 
 	public KimaiOds(String inputCsv, String templateOds, String nome, boolean mesePrecedente) {
+		this(Paths.get(inputCsv), templateOds, nome, mesePrecedente);
+	}
+
+	public KimaiOds(Path inputCsv, String templateOds, String nome, boolean mesePrecedente) {
 		this.inputCsv = inputCsv;
 		this.templateOds = templateOds;
 		this.nome = nome;
@@ -26,7 +30,7 @@ public class KimaiOds {
 	}
 
 	public void esegui() {
-		if (!Files.exists(Paths.get(inputCsv))) {
+		if (!Files.exists(inputCsv)) {
 			System.out.println("File CSV non trovato: " + inputCsv);
 			return;
 		}

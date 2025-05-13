@@ -1,37 +1,67 @@
 package com.example;
-import java.util.Scanner;
+
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
 
 public class Main {
+	private static void printUsage() {
+		System.out.println("Usage");
+		System.out.println("IoootaKimaiTool INPUT_FILE [OUTPUT_FILE] [CSV|ODS]");
+	}
+
 	public static void main(String[] args) throws IOException {
-		
+
 		if (args.length < 1) {
-			System.err.println("Numero di argomenti errato!");
+			printUsage();
 			System.exit(1);
 		}
-		
-		String inputFile = "/home/maurice/git/iooota-kimai-tool/src/main/resources/kimai-export.csv";
-		String presenzeTemplate = "/home/maurice/git/iooota-kimai-tool/src/main/resources/presenzeTemplate.ods";
 
-		String arg0 = args[0];
-		switch (arg0) {
+		Path inputFile = Paths.get(args[0]); // "E:\\Progetti\\Eclipse Workspace\\kimai-tool\\src\\main\\resources\\kimai-export.csv";
+		Path outputFile = Paths.get(System.getProperty("java.io.tmpdir"), "Kimai.output");
+		String outputFormat = "ODS";
+		String presenzeTemplate = "E:\\Progetti\\Eclipse Workspace\\kimai-tool\\src\\main\\resources\\presenzeTemplate.ods";
+		
+		switch (args.length) {
+		case 3: 
+			outputFormat = args[2];
+		case 2: 
+			outputFile = Paths.get(args[1]);
+			if (Files.exists(outputFile)) {
+				System.err.println("File di output già esistente: " + outputFile);
+				System.exit(1);
+			}
+			break;
+		case 1:
+			if (!Files.exists(inputFile) || !Files.isRegularFile(inputFile)) {
+				System.err.println("File di input non trovato: " + inputFile);
+				System.exit(1);
+			}
+			break;
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + args.length);
+		}
+
+		switch (outputFormat) {
 		case "ods":
 		case "ODS":
-		    Scanner scanner = new Scanner(System.in);
-		    System.out.print("Inserisci il tuo nome e cognome: ");
-		    String nome = scanner.nextLine();
-		    System.out.print("Vuoi inserire il mese precedente? (s/n): ");
-		    String risposta = scanner.nextLine().trim().toLowerCase();
-		    boolean usaMesePrecedente = risposta.equals("s") || risposta.equals("si");
-		    new KimaiOds(inputFile, presenzeTemplate, nome, usaMesePrecedente).esegui();
-		    break;
+			Scanner scanner = new Scanner(System.in);
+			System.out.print("Inserisci il tuo nome e cognome: ");
+			String nome = scanner.nextLine();
+			System.out.print("Vuoi inserire il mese precedente? (s/n): ");
+			String risposta = scanner.nextLine().trim().toLowerCase();
+			boolean usaMesePrecedente = risposta.equals("s") || risposta.equals("si");
+			new KimaiOds(inputFile, presenzeTemplate, nome, usaMesePrecedente).esegui();
+			break;
 		case "csv":
 		case "CSV":
 			KimaiCsv kimaiCsv = new KimaiCsv(inputFile);
 			System.out.println(kimaiCsv.getEntries());
 			break;
 		default:
-			System.err.println("Argomento " + arg0 + " inatteso");
+			System.err.println("Argomento " + outputFormat + " inatteso");
 			System.exit(2);
 		}
 	}

@@ -7,24 +7,33 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
-
+/**
+ * Classe principale per elaborare CSV
+ */
 public class KimaiCsv {
 	public static final String DEFAULT_CSV_SEPARATOR = ",";
 	private List<KimaiCsvModel> entries;
 	/**
-	 * Cosa a caso
+	 * Crea una nuova istanza {@link KimaiCsv} dal file di input passato usando il separatore di default {@value #DEFAULT_CSV_SEPARATOR}.
 	 * @param inputFile
 	 * @throws IOException
 	 */
 	public KimaiCsv(String inputFile) throws IOException {
-		this(inputFile, DEFAULT_CSV_SEPARATOR);
+		this(Paths.get(inputFile), DEFAULT_CSV_SEPARATOR);
+	}
+	/**
+	 * Cosa a caso
+	 * @param inputCsv
+	 * @throws IOException
+	 */
+	public KimaiCsv(Path inputCsv) throws IOException {
+		this(inputCsv, DEFAULT_CSV_SEPARATOR);
 	}
 
-	public KimaiCsv(String inputFile, String separator) throws IOException {
-		Path inputFilePath = Paths.get(inputFile);
+	public KimaiCsv(Path inputFilePath, String separator) throws IOException {
 
 		if (!Files.exists(inputFilePath)) {
-			System.out.println("Errore: il file \"" + inputFile + "\" non è stato trovato.");
+			System.out.println("Errore: il file \"" + inputFilePath + "\" non è stato trovato.");
 			return;
 		}
 
@@ -73,6 +82,8 @@ public class KimaiCsv {
 		}
 	}
 	
+
+
 	public List<KimaiCsvModel> getEntries() {
 		return entries;
 	}
