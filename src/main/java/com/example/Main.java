@@ -43,12 +43,17 @@ import java.util.Set;
 
 public class Main {
 
+	/**
+	 * Il nome dell'applicazione per i comuni mortali che la invocheranno
+	 */
+	public static final String APPLICATION_NAME = "IoootaKimaiTool";
+
     /**
      * Stampa un breve messaggio di utilizzo del programma.
      */
     private static void printUsage() {
         System.out.println("Usage");
-        System.out.println("IoootaKimaiTool INPUT_FILE [OUTPUT_FILE] [CSV|ODS]");
+        System.out.println(APPLICATION_NAME + " INPUT_FILE [OUTPUT_FILE] [CSV|ODS]");
     }
 
     /**
