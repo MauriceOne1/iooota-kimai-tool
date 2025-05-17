@@ -75,7 +75,7 @@ mvn exec:java -Dexec.mainClass=dev.iooota.kimai.Main -Dexec.args="kimai-export.c
 - [x] Compilazione rimborso chilometrico  
 - [x] Gestione automatica del nome del file di output  
 - [x] Inserimento data di compilazione  
-- [ ] Riconoscimento delle giornate in **smart working**  
+- [x] Riconoscimento delle giornate in **smart working**  
 - [ ] Riconoscimento automatico delle **giornate festive / chiusure aziendali**  
 - [ ] Collegamento diretto alle **API Kimai**  
 - [ ] Generazione **PDF** da ODS  
