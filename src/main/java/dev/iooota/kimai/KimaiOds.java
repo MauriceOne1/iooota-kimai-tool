@@ -79,8 +79,9 @@ public class KimaiOds {
 			Map<Integer, List<Long>> oreSmart = new HashMap<>();
 
 			for (KimaiCsvModel model : csvModelList) {
-				Map<Integer, List<Long>> map;
+				Map<Integer, List<Long>> map = null;
 				LocalDateTime startTime = model.getStarTime();
+				int dayOfMonth = startTime.getDayOfMonth();
 				LocalDateTime endTime = model.getEndTime();
 
 				if (isOreUfficio(model)) {
@@ -90,10 +91,10 @@ public class KimaiOds {
 					map = oreSmart;
 				}
 
-				if (!map.containsKey(startTime)) {
+				if (!map.containsKey(dayOfMonth)) {
 					map.put(startTime.getDayOfMonth(), new ArrayList<>());
 				}
-				List<Long> list = oreUfficio.get(startTime);
+				List<Long> list = map.get(dayOfMonth);
 
 				long hours = ChronoUnit.HOURS.between(startTime, endTime);
 				list.add(hours);
@@ -130,7 +131,7 @@ public class KimaiOds {
 					for (long l : list) {
 						sum += l;
 					}
-					sheet.setValueAt(8, 2, row); // Colonna C = indice 2
+					sheet.setValueAt(sum, 2, row); // Colonna C = indice 2
 				}
 				
 			}
