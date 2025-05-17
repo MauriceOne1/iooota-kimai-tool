@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
 /**
  * Classe di avvio per l'elaborazione di un file CSV esportato da Kimai e
@@ -104,10 +102,6 @@ public class Main {
         switch (outputFormat.toLowerCase()) {
             case "ods": {
                 KimaiCsv kimaiCsv = new KimaiCsv(inputFile);
-                Set<Integer> giorniConPresenza = new HashSet<>();
-                for (KimaiCsvModel model : kimaiCsv.getEntries()) {
-                    giorniConPresenza.add(model.getStarTime().getDayOfMonth());
-                }
 
                 try (Scanner scanner = new Scanner(System.in)) {
                     System.out.print("Inserisci il tuo nome e cognome: ");
@@ -116,7 +110,7 @@ public class Main {
                     String risposta = scanner.nextLine().trim().toLowerCase();
                     boolean usaMesePrecedente = risposta.equals("s") || risposta.equals("si");
 
-                    new KimaiOds(outputFile, nome, usaMesePrecedente, giorniConPresenza).esegui();
+                    new KimaiOds(outputFile, nome, usaMesePrecedente, kimaiCsv.getEntries()).esegui();
                 }
                 break;
             }
