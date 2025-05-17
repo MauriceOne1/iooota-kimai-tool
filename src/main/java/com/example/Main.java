@@ -76,7 +76,7 @@ public class Main {
         }
 
         Path inputFile = Paths.get(args[0]);
-        Path outputFile = Paths.get(System.getProperty("java.io.tmpdir"), "Kimai.output");
+        Path outputFile = Paths.get(System.getProperty("java.io.tmpdir"), "Kimai-output.ods");
         String outputFormat = "ODS";
 
         // Parsing degli argomenti
