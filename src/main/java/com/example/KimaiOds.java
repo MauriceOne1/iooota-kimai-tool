@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -32,7 +34,7 @@ public class KimaiOds {
 	private final Path outputFile;
 	private final String nome;
 	private final boolean mesePrecedente;
-	private final Set<Integer> giorniConPresenza;
+	private final List<KimaiCsvModel> csvModelList;
 
 	/**
 	 * Costruttore.
@@ -40,13 +42,13 @@ public class KimaiOds {
 	 * @param outputFile          percorso del file ODS da salvare
 	 * @param nome                nome della persona da scrivere nella cella G6
 	 * @param mesePrecedente      true per usare il mese precedente, false per usare il mese corrente
-	 * @param giorniConPresenza   insieme dei giorni del mese in cui si è rilevata una presenza
+	 * @param csvModelList        lista entry dal CSV originario
 	 */
-	public KimaiOds(Path outputFile, String nome, boolean mesePrecedente, Set<Integer> giorniConPresenza) {
+	public KimaiOds(Path outputFile, String nome, boolean mesePrecedente, List<KimaiCsvModel> csvModelList) {
 		this.outputFile = outputFile;
 		this.nome = nome;
 		this.mesePrecedente = mesePrecedente;
-		this.giorniConPresenza = giorniConPresenza;
+		this.csvModelList = csvModelList;
 	}
 
 	/**
@@ -60,6 +62,11 @@ public class KimaiOds {
 			OdsTemplateLoader templateLoader = new OdsTemplateLoader();
 			InputStream templateStream = templateLoader.resolveTemplateFile();
 			Sheet sheet = new ODPackage(templateStream).getSpreadSheet().getSheet(0);
+			
+			Set<Integer> giorniConPresenza = new HashSet<>();
+			for (KimaiCsvModel model : csvModelList) {
+				giorniConPresenza.add(model.getStarTime().getDayOfMonth());
+			}
 
 			// Scrivi il nome nella cella G6 (colonna 6, riga 5)
 			sheet.setValueAt(nome, 6, 5);
