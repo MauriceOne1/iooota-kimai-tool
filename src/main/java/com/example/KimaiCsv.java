@@ -173,7 +173,7 @@ class KimaiCsvModel {
         this.activity = attivita;
         this.description = desc;
         this.exported = esportate;
-        this.tags = Arrays.stream(tags.split(":")).collect(Collectors.toList());
+        this.tags = Arrays.stream(tags.split(",")).collect(Collectors.toList());
     }
 
     public LocalDateTime getStarTime() {
