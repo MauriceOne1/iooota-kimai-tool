@@ -78,7 +78,6 @@ public class Main {
         Path inputFile = Paths.get(args[0]);
         Path outputFile = Paths.get(System.getProperty("java.io.tmpdir"), "Kimai.output");
         String outputFormat = "ODS";
-        String presenzeTemplate = "E:\\Progetti\\Eclipse Workspace\\kimai-tool\\src\\main\\resources\\presenzeTemplate.ods";
 
         // Parsing degli argomenti
         switch (args.length) {
@@ -117,7 +116,7 @@ public class Main {
                     String risposta = scanner.nextLine().trim().toLowerCase();
                     boolean usaMesePrecedente = risposta.equals("s") || risposta.equals("si");
 
-                    new KimaiOds(outputFile, presenzeTemplate, nome, usaMesePrecedente, giorniConPresenza).esegui();
+                    new KimaiOds(outputFile, nome, usaMesePrecedente, giorniConPresenza).esegui();
                 }
                 break;
             }

@@ -1,14 +1,16 @@
 package com.example;
 
-import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.Set;
 
+import org.jopendocument.dom.ODPackage;
 import org.jopendocument.dom.spreadsheet.Sheet;
-import org.jopendocument.dom.spreadsheet.SpreadSheet;
+
+import com.example.utils.OdsTemplateLoader;
 
 /**
  * Classe che si occupa di compilare un file ODS a partire da un template.
@@ -28,7 +30,6 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
 public class KimaiOds {
 
 	private final Path outputFile;
-	private final String templateOds;
 	private final String nome;
 	private final boolean mesePrecedente;
 	private final Set<Integer> giorniConPresenza;
@@ -37,14 +38,12 @@ public class KimaiOds {
 	 * Costruttore.
 	 * 
 	 * @param outputFile          percorso del file ODS da salvare
-	 * @param templateOds         percorso del file template ODS da usare
 	 * @param nome                nome della persona da scrivere nella cella G6
 	 * @param mesePrecedente      true per usare il mese precedente, false per usare il mese corrente
 	 * @param giorniConPresenza   insieme dei giorni del mese in cui si è rilevata una presenza
 	 */
-	public KimaiOds(Path outputFile, String templateOds, String nome, boolean mesePrecedente, Set<Integer> giorniConPresenza) {
+	public KimaiOds(Path outputFile, String nome, boolean mesePrecedente, Set<Integer> giorniConPresenza) {
 		this.outputFile = outputFile;
-		this.templateOds = templateOds;
 		this.nome = nome;
 		this.mesePrecedente = mesePrecedente;
 		this.giorniConPresenza = giorniConPresenza;
@@ -58,8 +57,9 @@ public class KimaiOds {
 	public void esegui() {
 		try {
 			// Apri il file ODS dal template
-			File file = new File(templateOds);
-			Sheet sheet = SpreadSheet.createFromFile(file).getSheet(0);
+			OdsTemplateLoader templateLoader = new OdsTemplateLoader();
+			InputStream templateStream = templateLoader.resolveTemplateFile();
+			Sheet sheet = new ODPackage(templateStream).getSpreadSheet().getSheet(0);
 
 			// Scrivi il nome nella cella G6 (colonna 6, riga 5)
 			sheet.setValueAt(nome, 6, 5);
