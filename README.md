@@ -1,8 +1,6 @@
-# Kimai Presenze Tool 📅
+# Iooota: Kimai export tool 📅
 
-![Java](https://img.shields.io/badge/language-Java-007396?style=flat-square&logo=java)  
-![Status](https://img.shields.io/badge/status-in%20development-orange?style=flat-square)  
-![Platform](https://img.shields.io/badge/platform-cli-lightgrey?style=flat-square)
+![Java](https://img.shields.io/badge/language-Java-007396?style=flat-square&logo=java)  ![Status](https://img.shields.io/badge/status-in%20development-orange?style=flat-square)  ![Platform](https://img.shields.io/badge/platform-cli-lightgrey?style=flat-square)
 
 Strumento CLI per la generazione automatica di report presenze e rimborsi chilometrici a partire da un file CSV esportato da **Kimai**.  
 Produce file ODS compilati in base a template predefiniti.
