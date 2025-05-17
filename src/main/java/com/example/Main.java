@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+import com.example.utils.KimaiDownloader;
+
 /**
  * Classe di avvio per l'elaborazione di un file CSV esportato da Kimai e
  * generazione dell'output in formato ODS o CSV.
