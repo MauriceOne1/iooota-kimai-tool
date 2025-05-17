@@ -6,80 +6,84 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import com.example.KimaiOds;
 import com.example.Main;
 
 import dev.dirs.ProjectDirectories;
 
 /**
- * Classe per gestire il caricamento del template per l'output in formato ODS.
- * 
+ * Classe per gestire il caricamento dinamico di un file ODS template,
+ * dato il nome del file.
+ *
  * <p>
- * Il template da fornire è un file ODS che viene poi riempito
- * programmaticamente dalla classe {@link KimaiOds}.
- * 
- * <p>
- * Il file di template <code>{@value #TEMPLATE_FILE_NAME}</code> viene cercato
- * nelle seguenti posizioni, in ordine di priorità:
+ * Il file di template viene cercato, in ordine di priorità, nelle seguenti posizioni:
  * <ol>
- * <li>directory attuale
- * <li>sotto la directory {@value com.example.Main#APPLICATION_NAME} in un
- * percorso sotto la propria $HOME (OS dependent)
- * <li>classpath
+ *   <li>Directory corrente di esecuzione</li>
+ *   <li>Cartella di configurazione dell'applicazione sotto la home dell'utente
+ *       (es: ~/.config/com.example/IOOOTA/IoootaKimaiTool/)</li>
+ *   <li>Classpath del progetto (es. risorse incluse nel JAR)</li>
  * </ol>
- * 
+ * </p>
+ *
+ * <p>
+ * Questo approccio consente di riutilizzare la stessa logica per caricare
+ * template diversi come <code>presenzeTemplate.ods</code>,
+ * <code>rimborsoTemplate.ods</code>, ecc.
+ * </p>
+ *
  * @see ProjectDirectories
  */
 public class OdsTemplateLoader {
 
-	/**
-	 * Nome atteso per il file di template (FISSO)
-	 */
-	public static final String TEMPLATE_FILE_NAME = "presenzeTemplate.ods";
+    /**
+     * Directory sotto la home dell'utente in cui viene cercato il template.
+     */
+    private final Path homeConfigDir;
 
-	/**
-	 * Directory sotto la home dell'utente attuale nella quale verrà cercato il file
-	 * di template, se presente.
-	 * 
-	 * @see ProjectDirectories#configDir
-	 */
-	private final Path homeConfigDir;
+    /**
+     * Directory corrente di esecuzione.
+     */
+    private final Path currentDir;
 
-	/**
-	 * Directory corrente, ovvero directory di lavoro attuale del processo JVM che
-	 * richiama questa classe.
-	 */
-	private final Path currentDir;
+    /**
+     * Nome del file di template da cercare.
+     */
+    private final String templateFileName;
 
-	/**
-	 * Crea una nuova istanza di {@link OdsTemplateLoader} inizializzando i path di
-	 * ricerca interni.
-	 */
-	public OdsTemplateLoader() {
-		ProjectDirectories baseDirs = ProjectDirectories.from("com.example", "IOOOTA", Main.APPLICATION_NAME);
-		this.homeConfigDir = Paths.get(baseDirs.configDir);
-		this.currentDir = Paths.get("").toAbsolutePath();
-	}
+    /**
+     * Crea un nuovo loader per il file template specificato.
+     *
+     * @param templateFileName nome del file ODS (es: "presenzeTemplate.ods", "rimborsoTemplate.ods")
+     */
+    public OdsTemplateLoader(String templateFileName) {
+        ProjectDirectories baseDirs = ProjectDirectories.from("com.example", "IOOOTA", Main.APPLICATION_NAME);
+        this.homeConfigDir = Paths.get(baseDirs.configDir);
+        this.currentDir = Paths.get("").toAbsolutePath();
+        this.templateFileName = templateFileName;
+    }
 
-	/**
-	 * Ottiene un puntamento al file di template da utilizzare in base alle
-	 * politiche di ricerca attuali.
-	 * 
-	 * @throws IOException in caso di errore di I/O in apertura dell'InputStream
-	 */
-	public InputStream resolveTemplateFile() throws IOException {
-		Path templateInHomeCfg = homeConfigDir.resolve(TEMPLATE_FILE_NAME);
-		Path templateInCwd = currentDir.resolve(TEMPLATE_FILE_NAME);
+    /**
+     * Cerca e apre uno stream del file ODS specificato.
+     *
+     * @return InputStream del template trovato
+     * @throws IOException se il file non viene trovato in nessuna delle posizioni attese
+     */
+    public InputStream resolveTemplateFile() throws IOException {
+        Path templateInHomeCfg = homeConfigDir.resolve(templateFileName);
+        Path templateInCwd = currentDir.resolve(templateFileName);
 
-		if (Files.isRegularFile(templateInCwd) && Files.isReadable(templateInCwd)) {
-			return Files.newInputStream(templateInCwd);
-		}
-		
-		if (Files.isRegularFile(templateInHomeCfg) && Files.isReadable(templateInHomeCfg)) {
-			return Files.newInputStream(templateInHomeCfg);
-		}
+        if (Files.isRegularFile(templateInCwd) && Files.isReadable(templateInCwd)) {
+            return Files.newInputStream(templateInCwd);
+        }
 
-		return ClassLoader.getSystemResourceAsStream(TEMPLATE_FILE_NAME);
-	}
+        if (Files.isRegularFile(templateInHomeCfg) && Files.isReadable(templateInHomeCfg)) {
+            return Files.newInputStream(templateInHomeCfg);
+        }
 
+        InputStream resourceStream = ClassLoader.getSystemResourceAsStream(templateFileName);
+        if (resourceStream != null) {
+            return resourceStream;
+        }
+
+        throw new IOException("Template non trovato: " + templateFileName);
+    }
 }
