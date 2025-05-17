@@ -22,9 +22,9 @@ import dev.dirs.ProjectDirectories;
  * Il file di template <code>{@value #TEMPLATE_FILE_NAME}</code> viene cercato
  * nelle seguenti posizioni, in ordine di priorità:
  * <ol>
+ * <li>directory attuale
  * <li>sotto la directory {@value com.example.Main#APPLICATION_NAME} in un
  * percorso sotto la propria $HOME (OS dependent)
- * <li>directory attuale
  * <li>classpath
  * </ol>
  * 
@@ -71,12 +71,12 @@ public class OdsTemplateLoader {
 		Path templateInHomeCfg = homeConfigDir.resolve(TEMPLATE_FILE_NAME);
 		Path templateInCwd = currentDir.resolve(TEMPLATE_FILE_NAME);
 
-		if (Files.isRegularFile(templateInHomeCfg) && Files.isReadable(templateInHomeCfg)) {
-			return Files.newInputStream(templateInHomeCfg);
-		}
-
 		if (Files.isRegularFile(templateInCwd) && Files.isReadable(templateInCwd)) {
 			return Files.newInputStream(templateInCwd);
+		}
+		
+		if (Files.isRegularFile(templateInHomeCfg) && Files.isReadable(templateInHomeCfg)) {
+			return Files.newInputStream(templateInHomeCfg);
 		}
 
 		return ClassLoader.getSystemResourceAsStream(TEMPLATE_FILE_NAME);
