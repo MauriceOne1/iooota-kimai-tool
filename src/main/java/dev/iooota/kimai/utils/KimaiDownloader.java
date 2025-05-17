@@ -1,4 +1,4 @@
-package com.example.utils;
+package dev.iooota.kimai.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

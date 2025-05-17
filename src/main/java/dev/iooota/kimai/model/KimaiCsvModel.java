@@ -1,4 +1,4 @@
-package com.example.model;
+package dev.iooota.kimai.model;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;

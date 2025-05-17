@@ -36,7 +36,15 @@ Produce file ODS compilati in base a template predefiniti.
   - `ODS`: genera un report presenze  
   - `RIMBORSO`: genera un foglio per rimborso chilometrico  
   - `CSV`: stampa i dati grezzi su console  
-  - `API`: usa un CSV dimostrativo da remoto  
+  - `API`: usa un CSV dimostrativo da remoto 
+
+### Esempi
+
+Generazione del foglio rimborso chilometrico a partire da un CSV esportato da Kimai:
+
+```bash
+mvn exec:java -Dexec.mainClass=dev.iooota.kimai.Main -Dexec.args="kimai-export.csv export.ods rimborso"
+```
 
 ---
 

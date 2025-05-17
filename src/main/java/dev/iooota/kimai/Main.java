@@ -1,4 +1,5 @@
-package com.example;
+package dev.iooota.kimai;
+
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,7 +10,7 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.Scanner;
 
-import com.example.utils.KimaiDownloader;
+import dev.iooota.kimai.utils.KimaiDownloader;
 
 /**
  * Classe di avvio per l'elaborazione di un file CSV esportato da Kimai e

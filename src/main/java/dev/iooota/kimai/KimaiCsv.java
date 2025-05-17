@@ -1,4 +1,4 @@
-package com.example;
+package dev.iooota.kimai;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.model.KimaiCsvModel;
+import dev.iooota.kimai.model.KimaiCsvModel;
 
 /**
  * Classe principale per l'importazione e l'elaborazione di un file CSV esportato da Kimai.

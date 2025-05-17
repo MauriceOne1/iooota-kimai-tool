@@ -1,4 +1,4 @@
-package com.example;
+package dev.iooota.kimai;
 
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -10,8 +10,8 @@ import java.util.Set;
 import org.jopendocument.dom.ODPackage;
 import org.jopendocument.dom.spreadsheet.Sheet;
 
-import com.example.model.KimaiCsvModel;
-import com.example.utils.OdsTemplateLoader;
+import dev.iooota.kimai.model.KimaiCsvModel;
+import dev.iooota.kimai.utils.OdsTemplateLoader;
 
 /**
  * Classe che genera un file ODS di rimborso chilometrico partendo dai dati
