@@ -2,6 +2,7 @@ package dev.iooota.kimai;
 
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
@@ -146,6 +147,13 @@ public class KimaiOds {
 		}
 	}
 
+	/**
+	 * Ricava un set di giornate dalle chiavi delle due mappe fornite in input.
+	 * 
+	 * @param oreUfficio la mappa delle ore d'ufficio
+	 * @param oreSmart   la mappa delle ore smart working
+	 * @return un Set con la combinazione delle giornate contenute nelle due mappe
+	 */
 	private Set<Integer> getDaysList(Map<Integer, List<Long>> oreUfficio, Map<Integer, List<Long>> oreSmart) {
 
 		Set<Integer> result = new HashSet<>();
@@ -156,11 +164,41 @@ public class KimaiOds {
 		return result;
 	}
 
+	/**
+	 * Controlla se l'orario indicato dalla entry CSV in input è di tipo Smart
+	 * Working o no.
+	 * <p>
+	 * Per determinarlo, si controlla Se la entry contiene il tag
+	 * {@value #TAG_ORE_SMART} o se la entry riguarda giornate dichiaratamente di
+	 * smart working, ovvero Lunedì, Mercoledì o Venerdì.
+	 * 
+	 * @param model entry CSV da analizzare
+	 * @return true se le ore contenute sono di smart working, false altrimenti.
+	 */
 	private boolean isOreSmart(KimaiCsvModel model) {
+		if (model.getTags().isEmpty() && (model.getStarTime().getDayOfWeek() != DayOfWeek.TUESDAY
+				&& model.getStarTime().getDayOfWeek() != DayOfWeek.THURSDAY)) {
+			return true;
+		}
 		return model.getTags().contains(TAG_ORE_SMART);
 	}
 
+	/**
+	 * Controlla se l'orario indicato dalla entry CSV in input è di tipo Ufficio o
+	 * no.
+	 * <p>
+	 * Per determinarlo, si controlla Se la entry contiene il tag
+	 * {@value #TAG_ORE_UFFICIO} o se la entry riguarda giornate dichiaratamente di
+	 * ufficio, ovvero Martedì o Giovedì.
+	 * 
+	 * @param model entry CSV da analizzare
+	 * @return true se le ore contenute sono di ufficio, false altrimenti.
+	 */
 	private boolean isOreUfficio(KimaiCsvModel model) {
+		if (model.getTags().isEmpty() && (model.getStarTime().getDayOfWeek() == DayOfWeek.TUESDAY
+				|| model.getStarTime().getDayOfWeek() == DayOfWeek.THURSDAY)) {
+			return true;
+		}
 		return model.getTags().contains(TAG_ORE_UFFICIO);
 	}
 }
