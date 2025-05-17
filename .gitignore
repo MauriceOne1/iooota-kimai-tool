@@ -50,5 +50,8 @@ Thumbs.db
 .env
 
 
-# Tool specific
-presenzeCompilate.ods
+# Output ODS generati
+*.ods
+
+# Mantieni i template necessari
+!src/main/resources/*.ods
