@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.Scanner;
 
 import com.example.utils.KimaiDownloader;
@@ -16,19 +19,19 @@ import com.example.utils.KimaiDownloader;
  * Il programma accetta da uno a tre argomenti:
  * <ul>
  * <li><strong>1 argomento</strong>: solo il file di input. L'output sarà
- * generato in una directory temporanea, in formato ODS.</li>
+ * generato automaticamente in formato ODS con un nome basato sul mese
+ * corrente.</li>
  * <li><strong>2 argomenti</strong>: file di input e percorso file di output. Il
  * formato sarà ODS.</li>
  * <li><strong>3 argomenti</strong>: file di input, output e tipo di formato
- * (ODS o CSV).</li>
+ * (ODS, CSV, RIMBORSO o API).</li>
  * </ul>
  * </p>
  *
  * <p>
- * Se si sceglie il formato ODS, il programma chiederà all’utente di inserire il
- * proprio nome e se si vuole generare il file per il mese corrente o per quello
- * precedente. L'output ODS sarà generato compilando un template con i giorni di
- * presenza.
+ * Se si sceglie il formato ODS o RIMBORSO, il programma chiederà all’utente di
+ * inserire ulteriori informazioni da salvare nel file, come nome e altri
+ * parametri.
  * </p>
  *
  * <p>
@@ -46,6 +49,7 @@ import com.example.utils.KimaiDownloader;
  * </p>
  *
  * @author Maurice
+ * @author Alan
  */
 public class Main {
 
@@ -57,9 +61,24 @@ public class Main {
     /**
      * Stampa un breve messaggio di utilizzo del programma.
      */
+    /**
+     * Stampa un messaggio di aiuto sull'uso del programma.
+     */
     private static void printUsage() {
-        System.out.println("Usage");
-        System.out.println(APPLICATION_NAME + " INPUT_FILE [OUTPUT_FILE] [CSV|ODS]");
+        System.out.println("\n=== " + APPLICATION_NAME + " ===");
+        System.out.println("Strumento per generare report in formato ODS o CSV da un file esportato da Kimai.");
+        System.out.println();
+        System.out.println("PARAMETRI:");
+        System.out.println("  INPUT_FILE           Percorso del file CSV esportato da Kimai (obbligatorio)");
+        System.out.println("  OUTPUT_FILE          Percorso del file ODS/CSV da generare (opzionale)");
+        System.out.println("  FORMATO              Tipo di output: ODS (default), CSV, RIMBORSO, API");
+        System.out.println();
+        System.out.println("NOTE:");
+        System.out.println("  - Se OUTPUT_FILE non è specificato, verrà generato un nome automatico");
+        System.out.println("    basato sul mese corrente (es: exportRimborsoMaggio2025.ods).");
+        System.out.println("  - Alcuni formati richiedono input interattivo (es. nome utente, km, ecc.).");
+        System.out.println("  - L'applicazione si interrompe se il file di output esiste già.");
+        System.out.println();
     }
 
     /**
@@ -83,7 +102,31 @@ public class Main {
         }
 
         Path inputFile = Paths.get(args[0]);
-        Path outputFile = Paths.get(System.getProperty("java.io.tmpdir"), "Kimai-output.ods");
+        Path outputFile;
+
+        if (args.length >= 2) {
+            outputFile = Paths.get(args[1]);
+            if (Files.exists(outputFile)) {
+                System.err.println("File di output già esistente: " + outputFile);
+                System.exit(1);
+            }
+        } else {
+            // Genera nome automatico tipo "exportRimborsoMaggio2025.ods"
+            LocalDate oggi = LocalDate.now();
+            String nomeMese = oggi.getMonth().getDisplayName(TextStyle.FULL, Locale.ITALIAN);
+            nomeMese = nomeMese.substring(0, 1).toUpperCase() + nomeMese.substring(1).replace(" ", "");
+
+            String fileName = "exportRimborso" + nomeMese + oggi.getYear() + ".ods";
+
+            // Percorso in ~/Documents oppure usa la dir temporanea
+            outputFile = Paths.get(System.getProperty("user.home"), "Documents", fileName);
+            System.out.println("Nessun file di output specificato. Salvataggio automatico in: " + outputFile);
+
+            if (Files.exists(outputFile)) {
+                System.err.println("File già esistente: " + outputFile);
+                System.exit(1);
+            }
+        }
         String outputFormat = "ODS";
 
         // Parsing degli argomenti
@@ -111,7 +154,6 @@ public class Main {
         switch (outputFormat.toLowerCase()) {
             case "ods": {
                 KimaiCsv kimaiCsv = new KimaiCsv(inputFile);
-
                 try (Scanner scanner = new Scanner(System.in)) {
                     System.out.print("Inserisci il tuo nome e cognome: ");
                     String nome = scanner.nextLine();
@@ -123,6 +165,28 @@ public class Main {
                 }
                 break;
             }
+            case "rimborso": {
+                KimaiCsv kimaiCsv = new KimaiCsv(inputFile);
+
+                try (Scanner scanner = new Scanner(System.in)) {
+                    System.out.print("Inserisci il tuo nome e cognome: ");
+                    String nome = scanner.nextLine();
+                    System.out.print("Inserisci il tuo codice fiscale: ");
+                    String codiceFiscale = scanner.nextLine();
+                    System.out.print("Inserisci i chilometri del tratto lavoro-ufficio + ufficio-lavoro (es. 28.4): ");
+                    double km = Double.parseDouble(scanner.nextLine());
+                    System.out.println("ATTENZIONE! verrà creata una singola riga per giornata! (comprensiva di andata e ritorno)");
+                    System.out.print("Inserisci il coefficiente ACI (es. 0.39): ");
+                    double coefficiente = Double.parseDouble(scanner.nextLine());
+                    System.out.print("Inserisci il percorso effettuato (es: casa - lavoro / lavoro - casa): ");
+                    String tragitto = scanner.nextLine();
+                    System.out.print("Inserisci la descrizione: ");
+                    String descrizione = scanner.nextLine();
+                    new KimaiRimborso(outputFile, nome, codiceFiscale, km, coefficiente, kimaiCsv.getEntries(), descrizione, tragitto).esegui();
+                }
+                break;
+            }
+
             case "csv": {
                 KimaiCsv kimaiCsv = new KimaiCsv(inputFile);
                 System.out.println(kimaiCsv.getEntries());
