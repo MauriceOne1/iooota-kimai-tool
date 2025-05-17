@@ -1,7 +1,8 @@
 "Data","Da","A","Durata","Utente","Nome","Cliente","Progetto","Attività","Descrizione","Esportate","Tags"
-2025-05-05,17:05,18:43,5880,Alan,test@test.com,Test,Jarvis,Sviluppo Backend,Merge fix per eventi klima UNDEF,Non rendicontate,
-2025-05-06,15:11,17:06,6900,Alan,test@test.com,Test,Jarvis,Sistemistica,Controllo log e sistemi,Non rendicontate,
-2025-05-07,11:02,13:05,7380,Alan,test@test.com,Test,Jarvis,Sistemistica,Controllo log e sistemi,Non rendicontate,
-2025-05-08,10:02,11:02,3600,Alan,test@test.com,Test,Jarvis,Riunioni interne,Weekly start meeting,Non rendicontate,
-2025-05-13,09:13,10:03,3000,Alan,test@test.com,Test,Jarvis,Sistemistica,Controllo log e sistemi,Non rendicontate,
+"2025-05-08","14:00","18:00","14400","Maurizio Querzoli","maurizio","IOOOTA","Jarvis","Sviluppo Frontend","Sviluppi","Non rendicontate","ufficio"
+"2025-05-08","09:00","13:00","14400","Maurizio Querzoli","maurizio","IOOOTA","Jarvis","Sviluppo Frontend","Sviluppi","Non rendicontate","ufficio"
+"2025-05-07","14:00","18:00","14400","Maurizio Querzoli","maurizio","IOOOTA","Jarvis","Sviluppo Frontend","Sviluppi","Non rendicontate","smart"
+"2025-05-07","09:00","13:00","14400","Maurizio Querzoli","maurizio","IOOOTA","Jarvis","Sviluppo Frontend","Sviluppi","Non rendicontate","smart"
+"2025-05-06","14:00","18:00","14400","Maurizio Querzoli","maurizio","IOOOTA","Jarvis","Sviluppo Frontend","Sviluppi","Non rendicontate","ufficio"
+"2025-05-06","09:00","13:00","14400","Maurizio Querzoli","maurizio","IOOOTA","Jarvis","Sviluppo Frontend","Sviluppi","Non rendicontate","ufficio"
 "","","","[00]:00","","","","","","","",""
