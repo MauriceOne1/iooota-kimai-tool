@@ -12,6 +12,7 @@ import java.util.Set;
 import org.jopendocument.dom.ODPackage;
 import org.jopendocument.dom.spreadsheet.Sheet;
 
+import com.example.model.KimaiCsvModel;
 import com.example.utils.OdsTemplateLoader;
 
 /**
@@ -28,6 +29,7 @@ import com.example.utils.OdsTemplateLoader;
  * </p>
  * 
  * @author Maurice
+ * @author Alan
  */
 public class KimaiOds {
 
@@ -59,8 +61,8 @@ public class KimaiOds {
 	public void esegui() {
 		try {
 			// Apri il file ODS dal template
-			OdsTemplateLoader templateLoader = new OdsTemplateLoader();
-			InputStream templateStream = templateLoader.resolveTemplateFile();
+			OdsTemplateLoader loader = new OdsTemplateLoader("presenzeTemplate.ods");
+			InputStream templateStream = loader.resolveTemplateFile();
 			Sheet sheet = new ODPackage(templateStream).getSpreadSheet().getSheet(0);
 			
 			Set<Integer> giorniConPresenza = new HashSet<>();
