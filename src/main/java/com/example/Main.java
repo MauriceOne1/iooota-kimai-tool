@@ -13,38 +13,44 @@ import java.util.Scanner;
  * <p>
  * Il programma accetta da uno a tre argomenti:
  * <ul>
- *   <li><strong>1 argomento</strong>: solo il file di input. L'output sarà generato in una directory temporanea, in formato ODS.</li>
- *   <li><strong>2 argomenti</strong>: file di input e percorso file di output. Il formato sarà ODS.</li>
- *   <li><strong>3 argomenti</strong>: file di input, output e tipo di formato (ODS o CSV).</li>
+ * <li><strong>1 argomento</strong>: solo il file di input. L'output sarà
+ * generato in una directory temporanea, in formato ODS.</li>
+ * <li><strong>2 argomenti</strong>: file di input e percorso file di output. Il
+ * formato sarà ODS.</li>
+ * <li><strong>3 argomenti</strong>: file di input, output e tipo di formato
+ * (ODS o CSV).</li>
  * </ul>
  * </p>
  *
  * <p>
- * Se si sceglie il formato ODS, il programma chiederà all’utente di inserire il proprio nome e se si vuole generare
- * il file per il mese corrente o per quello precedente. L'output ODS sarà generato compilando un template con i giorni di presenza.
+ * Se si sceglie il formato ODS, il programma chiederà all’utente di inserire il
+ * proprio nome e se si vuole generare il file per il mese corrente o per quello
+ * precedente. L'output ODS sarà generato compilando un template con i giorni di
+ * presenza.
  * </p>
  *
  * <p>
- * Il file CSV di input deve essere un’esportazione da Kimai con almeno le colonne richieste dal parser {@link KimaiCsv}.
+ * Il file CSV di input deve essere un’esportazione da Kimai con almeno le
+ * colonne richieste dal parser {@link KimaiCsv}.
  * </p>
- * 
+ *
  * <p>
- * Se viene fornito un file di output già esistente, l'applicazione si interrompe per evitare sovrascritture.
+ * Se viene fornito un file di output già esistente, l'applicazione si
+ * interrompe per evitare sovrascritture.
  * </p>
- * 
+ *
  * <p>
  * Il formato predefinito di output è ODS.
  * </p>
- * 
+ *
  * @author Maurice
  */
-
 public class Main {
 
-	/**
-	 * Il nome dell'applicazione per i comuni mortali che la invocheranno
-	 */
-	public static final String APPLICATION_NAME = "IoootaKimaiTool";
+    /**
+     * Il nome dell'applicazione per i comuni mortali che la invocheranno
+     */
+    public static final String APPLICATION_NAME = "IoootaKimaiTool";
 
     /**
      * Stampa un breve messaggio di utilizzo del programma.
@@ -55,16 +61,17 @@ public class Main {
     }
 
     /**
-     * Metodo principale.
-     * Legge il file CSV di input e produce un file di output in formato ODS o CSV.
-     * 
+     * Metodo principale. Legge il file CSV di input e produce un file di output
+     * in formato ODS o CSV.
+     *
      * @param args argomenti da linea di comando:
-     *             <ul>
-     *                 <li>args[0] = file CSV di input</li>
-     *                 <li>args[1] = file di output (opzionale)</li>
-     *                 <li>args[2] = formato di output (CSV o ODS, opzionale)</li>
-     *             </ul>
-     * @throws IOException se si verifica un errore durante la lettura/scrittura dei file
+     * <ul>
+     * <li>args[0] = file CSV di input</li>
+     * <li>args[1] = file di output (opzionale)</li>
+     * <li>args[2] = formato di output (CSV o ODS, opzionale)</li>
+     * </ul>
+     * @throws IOException se si verifica un errore durante la lettura/scrittura
+     * dei file
      */
     public static void main(String[] args) throws IOException {
 
@@ -118,6 +125,13 @@ public class Main {
                 KimaiCsv kimaiCsv = new KimaiCsv(inputFile);
                 System.out.println(kimaiCsv.getEntries());
                 break;
+            }
+            case "api": {
+                String url = "https://raw.githubusercontent.com/plotly/datasets/master/2014_usa_states.csv";
+                String fileLocale = "export.csv";
+                Path inputFileAPI = KimaiDownloader.scaricaCsvDaUrl(url, fileLocale);
+                System.out.println("Contenuto del CSV:");
+                Files.lines(inputFileAPI).forEach(System.out::println);
             }
             default: {
                 System.err.println("Formato di output inatteso: " + outputFormat);
