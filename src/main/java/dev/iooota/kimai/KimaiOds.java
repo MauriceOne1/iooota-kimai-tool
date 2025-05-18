@@ -1,5 +1,6 @@
 package dev.iooota.kimai;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.time.DayOfWeek;
@@ -155,7 +156,7 @@ public class KimaiOds {
 			sheet.getSpreadSheet().saveAs(outputFile.toFile());
 			System.out.println("File ODS compilato salvato come: " + outputFile);
 
-		} catch (Exception e) {
+		} catch (IOException e) {
 			System.out.println("Errore durante l’elaborazione:");
 			e.printStackTrace();
 		}

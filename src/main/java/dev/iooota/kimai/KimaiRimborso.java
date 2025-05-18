@@ -1,5 +1,6 @@
 package dev.iooota.kimai;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -113,7 +114,7 @@ public class KimaiRimborso {
             sheet.getSpreadSheet().saveAs(outputFile.toFile());
             System.out.println("File ODS rimborso salvato in: " + outputFile);
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Errore durante la generazione del rimborso:");
             e.printStackTrace();
         }

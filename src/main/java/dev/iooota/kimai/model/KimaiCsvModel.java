@@ -28,7 +28,7 @@ public class KimaiCsvModel {
                          String cliente, String progetto, String attivita, String desc, String esportate, String tags) {
         this.starTime = from;
         this.endTime = to;
-        this.duration = Integer.parseInt(duration);
+        this.duration = Integer.valueOf(duration);
         this.user = utente;
         this.username = nome;
         this.client = cliente;
