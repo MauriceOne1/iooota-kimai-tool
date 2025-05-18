@@ -43,7 +43,7 @@ Produce file ODS compilati in base a template predefiniti.
 Generazione del foglio rimborso chilometrico a partire da un CSV esportato da Kimai:
 
 ```bash
-mvn exec:java -Dexec.args="src/main/resources/kimai-export.csv export.ods rimborso"
+mvn exec:java "-Dexec.args=src/main/resources/kimai-export.csv export.ods rimborso"
 ```
 
 ---
