@@ -2,11 +2,17 @@ package dev.iooota.kimai;
 
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import org.jopendocument.dom.ODPackage;
@@ -33,6 +39,19 @@ import dev.iooota.kimai.utils.OdsTemplateLoader;
  */
 public class KimaiOds {
 
+	private static final String TAG_ORE_SMART = "smart";
+	/**
+	 * Tag usato per identificare le ore di ufficio nel CSV
+	 */
+	private static final String TAG_ORE_UFFICIO = "ufficio";
+	/**
+	 * Insieme di giorni della settimana in smart working
+	 */
+	private final Set<DayOfWeek> giorniSmart = Set.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY);
+	/**
+	 * Insieme di giorni della settimana in ufficio
+	 */
+	private final Set<DayOfWeek> giorniUfficio= Set.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY);
 	private final Path outputFile;
 	private final String nome;
 	private final boolean mesePrecedente;
@@ -65,9 +84,35 @@ public class KimaiOds {
 			InputStream templateStream = loader.resolveTemplateFile();
 			Sheet sheet = new ODPackage(templateStream).getSpreadSheet().getSheet(0);
 			
-			Set<Integer> giorniConPresenza = new HashSet<>();
+			Map<Integer, List<Long>> oreUfficio = new HashMap<>();
+			Map<Integer, List<Long>> oreSmart = new HashMap<>();
+
 			for (KimaiCsvModel model : csvModelList) {
-				giorniConPresenza.add(model.getStarTime().getDayOfMonth());
+				Map<Integer, List<Long>> map = null;
+				LocalDateTime startTime = model.getStarTime();
+				int dayOfMonth = startTime.getDayOfMonth();
+				LocalDateTime endTime = model.getEndTime();
+
+				if (isOreUfficio(model)) {
+					map = oreUfficio;
+				}
+				if (isOreSmart(model)) {
+					map = oreSmart;
+				}
+				
+				if (map == null)
+				{
+					// TODO: straordinari o ferie?
+					continue;
+				}
+
+				if (!map.containsKey(dayOfMonth)) {
+					map.put(startTime.getDayOfMonth(), new ArrayList<>());
+				}
+				List<Long> list = map.get(dayOfMonth);
+
+				long hours = ChronoUnit.HOURS.between(startTime, endTime);
+				list.add(hours);
 			}
 
 			// Scrivi il nome nella cella G6 (colonna 6, riga 5)
@@ -85,9 +130,25 @@ public class KimaiOds {
 			sheet.setValueAt(meseAnno, 10, 5);
 
 			// Scrivi "8" nella colonna B per ogni giorno con presenza
-			for (Integer giorno : giorniConPresenza) {
+			for (Integer giorno : getDaysList(oreUfficio, oreSmart)) {
 				int row = 9 + (giorno - 1); // Riga per giorno (es. giorno 1 → riga 9)
-				sheet.setValueAt(8, 1, row); // Colonna B = indice 1
+				if (oreUfficio.containsKey(giorno)) {
+					List<Long> list = oreUfficio.get(giorno);
+					int sum = 0;
+					for (long l : list) {
+						sum += l;
+					}
+					sheet.setValueAt(sum, 1, row); // Colonna B = indice 1
+				}
+				if (oreSmart.containsKey(giorno)) {
+					List<Long> list = oreSmart.get(giorno);
+					int sum = 0;
+					for (long l : list) {
+						sum += l;
+					}
+					sheet.setValueAt(sum, 2, row); // Colonna C = indice 2
+				}
+				
 			}
 
 			// Salva il file ODS risultante
@@ -98,5 +159,58 @@ public class KimaiOds {
 			System.out.println("Errore durante l’elaborazione:");
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Ricava un set di giornate dalle chiavi delle due mappe fornite in input.
+	 * 
+	 * @param oreUfficio la mappa delle ore d'ufficio
+	 * @param oreSmart   la mappa delle ore smart working
+	 * @return un Set con la combinazione delle giornate contenute nelle due mappe
+	 */
+	private Set<Integer> getDaysList(Map<Integer, List<Long>> oreUfficio, Map<Integer, List<Long>> oreSmart) {
+
+		Set<Integer> result = new HashSet<>();
+
+		result.addAll(oreUfficio.keySet());
+		result.addAll(oreSmart.keySet());
+
+		return result;
+	}
+
+	/**
+	 * Controlla se l'orario indicato dalla entry CSV in input è di tipo Smart
+	 * Working o no.
+	 * <p>
+	 * Per determinarlo, si controlla Se la entry contiene il tag
+	 * {@value #TAG_ORE_SMART} o se la entry riguarda giornate dichiaratamente di
+	 * smart working, ovvero Lunedì, Mercoledì o Venerdì.
+	 * 
+	 * @param model entry CSV da analizzare
+	 * @return true se le ore contenute sono di smart working, false altrimenti.
+	 */
+	private boolean isOreSmart(KimaiCsvModel model) {
+		if (model.getTags().isEmpty()) {
+			return giorniSmart.contains(model.getStarTime().getDayOfWeek());
+		}
+		return model.getTags().contains(TAG_ORE_SMART);
+	}
+
+	/**
+	 * Controlla se l'orario indicato dalla entry CSV in input è di tipo Ufficio o
+	 * no.
+	 * <p>
+	 * Per determinarlo, si controlla Se la entry contiene il tag
+	 * {@value #TAG_ORE_UFFICIO} o se la entry riguarda giornate dichiaratamente di
+	 * ufficio, ovvero Martedì o Giovedì.
+	 * 
+	 * @param model entry CSV da analizzare
+	 * @return true se le ore contenute sono di ufficio, false altrimenti.
+	 */
+	private boolean isOreUfficio(KimaiCsvModel model) {
+		if (model.getTags().isEmpty()) {
+			return giorniUfficio.contains(model.getStarTime().getDayOfWeek());
+		}
+		return model.getTags().contains(TAG_ORE_UFFICIO);
 	}
 }
