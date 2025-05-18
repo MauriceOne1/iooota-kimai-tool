@@ -44,6 +44,14 @@ public class KimaiOds {
 	 * Tag usato per identificare le ore di ufficio nel CSV
 	 */
 	private static final String TAG_ORE_UFFICIO = "ufficio";
+	/**
+	 * Insieme di giorni della settimana in smart working
+	 */
+	private final Set<DayOfWeek> giorniSmart = Set.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY);
+	/**
+	 * Insieme di giorni della settimana in ufficio
+	 */
+	private final Set<DayOfWeek> giorniUfficio= Set.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY);
 	private final Path outputFile;
 	private final String nome;
 	private final boolean mesePrecedente;
@@ -176,9 +184,8 @@ public class KimaiOds {
 	 * @return true se le ore contenute sono di smart working, false altrimenti.
 	 */
 	private boolean isOreSmart(KimaiCsvModel model) {
-		if (model.getTags().isEmpty() && (model.getStarTime().getDayOfWeek() != DayOfWeek.TUESDAY
-				&& model.getStarTime().getDayOfWeek() != DayOfWeek.THURSDAY)) {
-			return true;
+		if (model.getTags().isEmpty()) {
+			return giorniSmart.contains(model.getStarTime().getDayOfWeek());
 		}
 		return model.getTags().contains(TAG_ORE_SMART);
 	}
@@ -195,9 +202,8 @@ public class KimaiOds {
 	 * @return true se le ore contenute sono di ufficio, false altrimenti.
 	 */
 	private boolean isOreUfficio(KimaiCsvModel model) {
-		if (model.getTags().isEmpty() && (model.getStarTime().getDayOfWeek() == DayOfWeek.TUESDAY
-				|| model.getStarTime().getDayOfWeek() == DayOfWeek.THURSDAY)) {
-			return true;
+		if (model.getTags().isEmpty()) {
+			return giorniUfficio.contains(model.getStarTime().getDayOfWeek());
 		}
 		return model.getTags().contains(TAG_ORE_UFFICIO);
 	}
