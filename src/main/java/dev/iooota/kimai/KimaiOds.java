@@ -99,6 +99,12 @@ public class KimaiOds {
 				if (isOreSmart(model)) {
 					map = oreSmart;
 				}
+				
+				if (map == null)
+				{
+					// TODO: straordinari o ferie?
+					continue;
+				}
 
 				if (!map.containsKey(dayOfMonth)) {
 					map.put(startTime.getDayOfMonth(), new ArrayList<>());
