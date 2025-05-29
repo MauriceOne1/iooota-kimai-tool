@@ -76,7 +76,8 @@ mvn exec:java "-Dexec.args=src/main/resources/kimai-export.csv export.ods rimbor
 - [x] Gestione automatica del nome del file di output  
 - [x] Inserimento data di compilazione  
 - [x] Riconoscimento delle giornate in **smart working**  
-- [ ] Riconoscimento automatico delle **giornate festive / chiusure aziendali**  
+- [ ] Riconoscimento automatico delle **giornate festive / chiusure aziendali** 
+- [ ] Check se inserito 8 ore (controllo su meno o più del orario) 
 - [ ] Collegamento diretto alle **API Kimai**  
 - [ ] Generazione **PDF** da ODS  
 - [ ] Inserimento **firma automatica**  
