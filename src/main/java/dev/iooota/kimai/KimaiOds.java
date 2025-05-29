@@ -41,10 +41,13 @@ import dev.iooota.kimai.utils.OdsTemplateLoader;
 public class KimaiOds {
 
 	private static final String TAG_ORE_SMART = "smart";
-	/**
-	 * Tag usato per identificare le ore di ufficio nel CSV
-	 */
 	private static final String TAG_ORE_UFFICIO = "ufficio";
+
+	private static final String TAG_ORE_PERMESSO = "permesso";
+	private static final String TAG_ORE_MALATTIA = "malattia";
+	private static final String TAG_ORE_FERIE = "ferie";
+
+
 	/**
 	 * Insieme di giorni della settimana in smart working
 	 */
@@ -53,6 +56,7 @@ public class KimaiOds {
 	 * Insieme di giorni della settimana in ufficio
 	 */
 	private final Set<DayOfWeek> giorniUfficio= Set.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY);
+
 	private final Path outputFile;
 	private final String nome;
 	private final boolean mesePrecedente;
@@ -213,5 +217,12 @@ public class KimaiOds {
 			return giorniUfficio.contains(model.getStarTime().getDayOfWeek());
 		}
 		return model.getTags().contains(TAG_ORE_UFFICIO);
+	}
+
+	private boolean isPermessoFerieMalattia(KimaiCsvModel model){
+		// if (model.getTags().isEmpty()) {
+		// 	return giorniUfficio.contains(model.getStarTime().getDayOfWeek());
+		// }
+		// return model.getTags().contains(TAG_ORE_UFFICIO);
 	}
 }
