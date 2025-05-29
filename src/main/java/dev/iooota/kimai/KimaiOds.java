@@ -224,5 +224,6 @@ public class KimaiOds {
 		// 	return giorniUfficio.contains(model.getStarTime().getDayOfWeek());
 		// }
 		// return model.getTags().contains(TAG_ORE_UFFICIO);
+		return true;
 	}
 }
