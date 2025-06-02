@@ -43,7 +43,6 @@
                     <archive>
                         <manifest>
                             <mainClass>dev.iooota.kimai.Main</mainClass>
-                            <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
                 </configuration>
