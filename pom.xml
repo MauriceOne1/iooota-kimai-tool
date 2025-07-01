@@ -33,6 +33,7 @@
                 <version>1.6.0</version>
                 <configuration>
                     <mainClass>dev.iooota.kimai.Main</mainClass>
+                    <addResourcesToClasspath>true</addResourcesToClasspath>
                 </configuration>
             </plugin>
             <plugin>

@@ -77,7 +77,7 @@ public class OdsTemplateLoader {
             return Files.newInputStream(templateInHomeCfg);
         }
 
-        InputStream resourceStream = ClassLoader.getSystemResourceAsStream(templateFileName);
+        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(templateFileName);
         if (resourceStream != null) {
             return resourceStream;
         }
